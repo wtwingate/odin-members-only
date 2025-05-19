@@ -1,4 +1,12 @@
-<%= form_for post do |form| %>
+<%= form_with model: post do |form| %>
+  <% if post.errors.any? %>
+    <ul>
+      <% post.errors.each do |error| %>
+        <li><%= error.full_message %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
   <div>
     <%= form.label :title %>
     <%= form.text_field :title %>
