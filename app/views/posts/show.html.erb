@@ -1,7 +1,7 @@
 <h1><%= @post.title %></h1>
 
 <% if user_signed_in? %>
-  <p>by <%= @post.user.email %></p>
+  <p class="author"><%= @post.user.email %></p>
 <% end %>
 
 <p><%= @post.body %></p>
