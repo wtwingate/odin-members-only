@@ -1,5 +1,7 @@
 class PostsController < ApplicationController
+  before_action :authenticate_user!, except: %i[index show]
   before_action :set_post, only: %i[show edit update destroy]
+
   def index
     @posts = Post.all
   end
@@ -12,10 +14,13 @@ class PostsController < ApplicationController
   end
 
   def create
+    @post = Post.new(post_params)
+    @post.user = current_user
+
     if @post.save
       redirect_to @post, notice: "Post was successfully created!"
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -26,7 +31,7 @@ class PostsController < ApplicationController
     if @post.update(post_params)
       redirect_to @post, notice: "Post was successfully updated!"
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -42,6 +47,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.expect(:post [:title, :body])
+    params.expect(post: [ :title, :body ])
   end
 end
